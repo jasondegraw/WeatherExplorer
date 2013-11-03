@@ -29,6 +29,37 @@ class WeatherDataModel : public QAbstractTableModel
 public:
     WeatherDataModel();
     bool loadEpw(QString filename);
+    bool writeEpw(QString filename);
+    bool writeWth(QString filename);
+    bool writeWea(QString filename);
+    void clear();
+
+    std::string city() const;
+    void setCity(std::string city);
+    std::string stateProvinceRegion() const;
+    void setStateProvinceRegion(std::string stateProvinceRegion);
+    std::string country() const;
+    void setCountry(std::string country);
+    std::string source() const;
+    void setSource(std::string source);
+    std::string WMO() const;
+    void setWMO(std::string WMO);
+    double latitude() const;
+    std::string latitudeString() const;
+    bool setLatitude(double latitude);
+    bool setLatitude(std::string latitude);
+    double longitude() const;
+    std::string longitudeString() const;
+    bool setLongitude(double longitude);
+    bool setLongitude(std::string longitude);
+    double timeZone() const;
+    std::string timeZoneString() const;
+    bool setTimeZone(double timeZone);
+    bool setTimeZone(std::string timeZone);
+    double elevation() const;
+    std::string elevationString() const;
+    bool setElevation(double elevation);
+    bool setElevation(std::string elevation);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     int columnCount(const QModelIndex & parent = QModelIndex()) const
@@ -41,6 +72,18 @@ public:
     //bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 
 private:
+    bool readLocation(QString line);
+
+    std::string m_city;
+    std::string m_stateProvinceRegion;
+    std::string m_country;
+    std::string m_source;
+    std::string m_WMO;
+    QString m_latitude;
+    QString m_longitude;
+    QString m_timeZone;
+    QString m_elevation;
+
     QStringList m_headers;
     QVector<WeatherDataPoint> m_data;
 };

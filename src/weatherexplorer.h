@@ -45,8 +45,10 @@ public:
     void retranslateUi();
 
 private slots:
-    void on_actionOpen_triggered();
     void on_actionNew_triggered();
+    void on_actionOpen_triggered();
+    void on_actionSave_triggered();
+    void on_actionExport_triggered();
 
 private:
     QAction *actionNew;
@@ -62,6 +64,7 @@ private:
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
+    QMenu *menuData;
     QMenu *menuHelp;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;

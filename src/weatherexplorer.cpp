@@ -19,6 +19,7 @@
 #include "weatherexplorer.h"
 
 #include <QFileDialog>
+#include "locationdialog.h"
 
 WeatherExploder::WeatherExploder(QWidget *parent) : QMainWindow(parent)
 {
@@ -56,7 +57,7 @@ void WeatherExploder::setupUi()
     icon2.addFile(QStringLiteral(":/images/save.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionSave->setIcon(icon2);
     actionExport = new QAction(this);
-    actionExport->setObjectName(QStringLiteral("actionSave"));
+    actionExport->setObjectName(QStringLiteral("actionExport"));
     QIcon icon3;
     icon3.addFile(QStringLiteral(":/images/export.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionExport->setIcon(icon3);
@@ -85,6 +86,8 @@ void WeatherExploder::setupUi()
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuEdit = new QMenu(menuBar);
     menuEdit->setObjectName(QStringLiteral("menuEdit"));
+    menuData = new QMenu(menuBar);
+    menuData->setObjectName(QStringLiteral("menuData"));
     menuHelp = new QMenu(menuBar);
     menuHelp->setObjectName(QStringLiteral("menuHelp"));
     setMenuBar(menuBar);
@@ -97,6 +100,7 @@ void WeatherExploder::setupUi()
 
     menuBar->addAction(menuFile->menuAction());
     menuBar->addAction(menuEdit->menuAction());
+    menuBar->addAction(menuData->menuAction());
     menuBar->addAction(menuHelp->menuAction());
     menuFile->addAction(actionNew);
     menuFile->addAction(actionOpen);
@@ -131,7 +135,13 @@ void WeatherExploder::retranslateUi()
     actionAbout->setText(QApplication::translate("WeatherExploder", "About...", 0));
     menuFile->setTitle(QApplication::translate("WeatherExploder", "&File", 0));
     menuEdit->setTitle(QApplication::translate("WeatherExploder", "&Edit", 0));
+    menuData->setTitle(QApplication::translate("WeatherExploder", "&Data", 0));
     menuHelp->setTitle(QApplication::translate("WeatherExploder", "&Help", 0));
+}
+
+void WeatherExploder::on_actionNew_triggered()
+{
+    m_model.clear();
 }
 
 void WeatherExploder::on_actionOpen_triggered()
@@ -149,6 +159,26 @@ void WeatherExploder::on_actionOpen_triggered()
     }
 }
 
-void WeatherExploder::on_actionNew_triggered()
+void WeatherExploder::on_actionSave_triggered()
 {
+    LocationDialog dialog(QString().fromStdString(m_model.city()),
+                          QString().fromStdString(m_model.stateProvinceRegion()),
+                          QString().fromStdString(m_model.country()),
+                          QString().fromStdString(m_model.source()),
+                          QString().fromStdString(m_model.WMO()),
+                          QString().fromStdString(m_model.latitudeString()),
+                          QString().fromStdString(m_model.longitudeString()),
+                          QString().fromStdString(m_model.timeZoneString()),
+                          QString().fromStdString(m_model.elevationString()),this);
+    if(dialog.exec() == QDialog::Accepted)
+    {
+
+    }
+}
+
+void WeatherExploder::on_actionExport_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
+                                                    "", tr("CONTAM WTH (*.wth);;Radiance WEA (*.wea)"));
+    std::cout << fileName.toStdString() << std::endl;
 }

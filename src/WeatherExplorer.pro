@@ -14,11 +14,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         weatherexplorer.cpp \
     weatherdatamodel.cpp \
-    weatherdatapoint.cpp
+    weatherdatapoint.cpp \
+    locationdialog.cpp
 
 HEADERS  += weatherexplorer.h \
     weatherdatamodel.h \
-    weatherdatapoint.h
+    weatherdatapoint.h \
+    locationdialog.h
 
 RESOURCES += \
     resources.qrc
+
+FORMS += \
+    locationdialog.ui
