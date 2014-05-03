@@ -19,11 +19,16 @@
 #include "weatherexplorer.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 #include "locationdialog.h"
+#include "logging.h"
 
 WeatherExploder::WeatherExploder(QWidget *parent) : QMainWindow(parent)
 {
     setupUi();
+    // Turn on logging
+    logging::initialize(m_log);
+    // Set up the model
     tableView->setModel(&m_model);
     tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     //tableView->horizontalHeader()->resizeSection(0, 200);
@@ -67,6 +72,8 @@ void WeatherExploder::setupUi()
     actionContents->setObjectName(QStringLiteral("actionContents"));
     actionAbout = new QAction(this);
     actionAbout->setObjectName(QStringLiteral("actionAbout"));
+    actionShowLog = new QAction(this);
+    actionShowLog->setObjectName(QStringLiteral("actionShowLog"));
     centralWidget = new QWidget(this);
     centralWidget->setObjectName(QStringLiteral("centralWidget"));
     gridLayout = new QGridLayout(centralWidget);
@@ -86,8 +93,8 @@ void WeatherExploder::setupUi()
     menuFile->setObjectName(QStringLiteral("menuFile"));
     menuEdit = new QMenu(menuBar);
     menuEdit->setObjectName(QStringLiteral("menuEdit"));
-    menuData = new QMenu(menuBar);
-    menuData->setObjectName(QStringLiteral("menuData"));
+    menuWindow = new QMenu(menuBar);
+    menuWindow->setObjectName(QStringLiteral("menuWindow"));
     menuHelp = new QMenu(menuBar);
     menuHelp->setObjectName(QStringLiteral("menuHelp"));
     setMenuBar(menuBar);
@@ -100,19 +107,22 @@ void WeatherExploder::setupUi()
 
     menuBar->addAction(menuFile->menuAction());
     menuBar->addAction(menuEdit->menuAction());
-    menuBar->addAction(menuData->menuAction());
+    menuBar->addAction(menuWindow->menuAction());
     menuBar->addAction(menuHelp->menuAction());
     menuFile->addAction(actionNew);
     menuFile->addAction(actionOpen);
     menuFile->addAction(actionSave);
     menuFile->addAction(actionExport);
     menuFile->addAction(actionExit);
+    menuWindow->addAction(actionShowLog);
     menuHelp->addAction(actionContents);
     menuHelp->addAction(actionAbout);
     mainToolBar->addAction(actionNew);
     mainToolBar->addAction(actionOpen);
     mainToolBar->addAction(actionSave);
     mainToolBar->addAction(actionExport);
+
+    m_log = new LoggingDialog(this);
 
     retranslateUi();
 
@@ -133,9 +143,10 @@ void WeatherExploder::retranslateUi()
     actionExit->setShortcut(QApplication::translate("WeatherExploder", "Ctrl+Q", 0));
     actionContents->setText(QApplication::translate("WeatherExploder", "Contents", 0));
     actionAbout->setText(QApplication::translate("WeatherExploder", "About...", 0));
+    actionShowLog->setText(QApplication::translate("WeatherExploder", "Show Log...", 0));
     menuFile->setTitle(QApplication::translate("WeatherExploder", "&File", 0));
     menuEdit->setTitle(QApplication::translate("WeatherExploder", "&Edit", 0));
-    menuData->setTitle(QApplication::translate("WeatherExploder", "&Data", 0));
+    menuWindow->setTitle(QApplication::translate("WeatherExploder", "&Window", 0));
     menuHelp->setTitle(QApplication::translate("WeatherExploder", "&Help", 0));
 }
 
@@ -151,7 +162,12 @@ void WeatherExploder::on_actionOpen_triggered()
     if(!fileName.isNull())
     {
         tableView->reset();
-        m_model.loadEpw(fileName);
+        if(!m_model.loadEpw(fileName)) {
+            m_model.clear();
+            QMessageBox::critical(this, QApplication::translate("WeatherExploder", "File Read Failed"),
+                                  QApplication::translate("WeatherExploder", "The selected file could not be read.\n"
+                                                          "Check the log for details"),QMessageBox::Ok);
+        }
         //ui->tableView->reset();
         //ui->tableView->update();
         //ui->tableView->repaint();
@@ -161,6 +177,7 @@ void WeatherExploder::on_actionOpen_triggered()
 
 void WeatherExploder::on_actionSave_triggered()
 {
+    /*
     LocationDialog dialog(QString().fromStdString(m_model.city()),
                           QString().fromStdString(m_model.stateProvinceRegion()),
                           QString().fromStdString(m_model.country()),
@@ -173,7 +190,9 @@ void WeatherExploder::on_actionSave_triggered()
     if(dialog.exec() == QDialog::Accepted)
     {
 
-    }
+    }*/
+    LOG(info) << "Well, I hope this works";
+    LOG(info) << "Hello?";
 }
 
 void WeatherExploder::on_actionExport_triggered()
@@ -181,4 +200,9 @@ void WeatherExploder::on_actionExport_triggered()
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
                                                     "", tr("CONTAM WTH (*.wth);;Radiance WEA (*.wea)"));
     std::cout << fileName.toStdString() << std::endl;
+}
+
+void WeatherExploder::on_actionShowLog_triggered()
+{
+    m_log->show();
 }

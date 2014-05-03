@@ -21,6 +21,8 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "logging.h"
+
 WeatherDataModel::WeatherDataModel()
 {
     m_headers << "Date" << "Time" << "Dry Bulb\nTemperature (C)"
@@ -43,9 +45,10 @@ bool WeatherDataModel::readLocation(QString line)
 {
     QStringList list = line.split(',');
     // Require 10 items in the list
-    if(list.size() != 10)
-    {
-        ERROR("Location: Incorrect number of entries");
+    if(list.size() > 10) {
+        LOG(warning) << "Location: Expected 10 entries, got " << list.size();
+    } else if(list.size() != 10) {
+        LOG(error) << "Location: Expected 10 entries, got " << list.size();
         return false;
     }
     setCity(list[1].toStdString());
@@ -53,24 +56,20 @@ bool WeatherDataModel::readLocation(QString line)
     setCountry(list[3].toStdString());
     setSource(list[4].toStdString());
     setWMO(list[5].toStdString());
-    if(!setLatitude(list[6].toStdString()))
-    {
-        ERROR(QString("Location: Bad latitude value '%1'").arg(list[6]).toStdString());
+    if(!setLatitude(list[6].toStdString())) {
+        LOG(error) << QString("Location: Bad latitude value '%1'").arg(list[6]).toStdString();
         return false;
     }
-    if(!setLongitude(list[7].toStdString()))
-    {
-        ERROR(QString("Location: Bad latitude value '%1'").arg(list[7]).toStdString());
+    if(!setLongitude(list[7].toStdString())) {
+        LOG(error) << QString("Location: Bad latitude value '%1'").arg(list[7]).toStdString();
         return false;
     }
-    if(!setTimeZone(list[8].toStdString()))
-    {
-        ERROR(QString("Location: Bad time zone value '%1'").arg(list[8]).toStdString());
+    if(!setTimeZone(list[8].toStdString())) {
+        LOG(error) << QString("Location: Bad time zone value '%1'").arg(list[8]).toStdString();
         return false;
     }
-    if(!setElevation(list[9].toStdString()))
-    {
-        ERROR(QString("Location: Bad elevation value '%1'").arg(list[9]).toStdString());
+    if(!setElevation(list[9].toStdString())) {
+        LOG(error) << QString("Location: Bad elevation value '%1'").arg(list[9]).toStdString();
         return false;
     }
     return true;
@@ -78,37 +77,53 @@ bool WeatherDataModel::readLocation(QString line)
 
 bool WeatherDataModel::loadEpw(QString filename)
 {
+    int lineNumber=0;
     QFile fp(filename);
     if(!fp.open(QFile::ReadOnly))
     {
-        std::cout << "Failed to open file '" << filename.toStdString() << "'.";
+        LOG(error) << "WeatherDataModel: Failed to open file '" << filename.toStdString() << "'.";
         return false;
     }
     QTextStream stream(&fp);
     QString line = stream.readLine();
-    readLocation(line);
+    lineNumber++;
+    if(!readLocation(line)) {
+        return false;
+    }
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+    lineNumber++;
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
 
     beginResetModel();
     m_data.clear();
-    while(!line.isNull())
-    {
-        m_data << WeatherDataPoint(line.toStdString());
+    while(!line.isNull()){
+        lineNumber++;
+        WeatherDataPoint point;
+        if(!point.fromEpwString(line.toStdString())) {
+            LOG(error) << "Failed to read input line " << lineNumber;
+            return false;
+        }
+        m_data << point;
         line = stream.readLine();
     }
     endResetModel();

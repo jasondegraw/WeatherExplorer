@@ -12,3 +12,8 @@ LoggingDialog::~LoggingDialog()
 {
     delete ui;
 }
+
+void LoggingDialog::store(std::string message)
+{
+    ui->textEdit->append(QString::fromStdString(message));
+}

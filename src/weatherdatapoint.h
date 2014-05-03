@@ -41,7 +41,6 @@ public:
                              LiquidPrecipitationDepth,LiquidPrecipitationQuantity};
 
     WeatherDataPoint();
-    WeatherDataPoint(std::string line);
     WeatherDataPoint(int year,int month,int day,int hour,int minute,
                      std::string dataSourceandUncertaintyFlags,double dryBulbTemperature,
                      double dewPointTemperature,double relativeHumidity,double atmosphericStationPressure,
@@ -56,6 +55,7 @@ public:
                      double daysSinceLastSnowfall,double albedo,double liquidPrecipitationDepth,
                      double liquidPrecipitationQuantity);
     // Conversion
+    bool fromEpwString(std::string line);
     std::string toWthString();
     // One billion getters and setters
     int year() const;

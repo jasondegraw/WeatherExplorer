@@ -32,6 +32,7 @@
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "loggingdialog.h"
 #include "weatherdatamodel.h"
 
 class WeatherExploder : public QMainWindow
@@ -49,6 +50,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionExport_triggered();
+    void on_actionShowLog_triggered();
 
 private:
     QAction *actionNew;
@@ -59,16 +61,19 @@ private:
     QAction *actionLocation;
     QAction *actionContents;
     QAction *actionAbout;
+    QAction *actionShowLog;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTableView *tableView;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuEdit;
-    QMenu *menuData;
+    QMenu *menuWindow;
     QMenu *menuHelp;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
+
+    LoggingDialog *m_log;
 
     WeatherDataModel m_model;
 };

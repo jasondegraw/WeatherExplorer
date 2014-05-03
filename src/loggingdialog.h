@@ -2,6 +2,7 @@
 #define LOGGINGDIALOG_H
 
 #include <QDialog>
+#include <string>
 
 namespace Ui {
 class LoggingDialog;
@@ -14,6 +15,8 @@ class LoggingDialog : public QDialog
 public:
     explicit LoggingDialog(QWidget *parent = 0);
     ~LoggingDialog();
+
+    void store(std::string message);
 
 private:
     Ui::LoggingDialog *ui;

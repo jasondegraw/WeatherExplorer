@@ -20,25 +20,29 @@
 #include <QStringList>
 #include <math.h>
 
+#include "logging.h"
+
 WeatherDataPoint::WeatherDataPoint()
 {
 }
 
-WeatherDataPoint::WeatherDataPoint(std::string line)
+bool WeatherDataPoint::fromEpwString(std::string line)
 {
     QStringList list = QString().fromStdString(line).split(',');
     // Require 35 items in the list
     if(list.size() != 35)
     {
-        ERROR("WeatherDataPoint: Bad input line");
-        return;
+        LOG(error) << "WeatherDataPoint Expected 35 fields, got " << list.size();
+        return false;
     }
     // Use the appropriate setter on each field
     setYear(list[0].toStdString());
     setMonth(list[1].toStdString());
     setDay(list[2].toStdString());
     setHour(list[3].toStdString());
-    setMinute(list[4].toStdString());
+    if(!setMinute(list[4].toStdString())) {
+        return false;
+    }
     setDataSourceandUncertaintyFlags(list[5].toStdString());
     setDryBulbTemperature(list[6].toStdString());
     setDewPointTemperature(list[7].toStdString());
@@ -69,6 +73,7 @@ WeatherDataPoint::WeatherDataPoint(std::string line)
     setAlbedo(list[32].toStdString());
     setLiquidPrecipitationDepth(list[33].toStdString());
     setLiquidPrecipitationQuantity(list[34].toStdString());
+    return true;
 }
 
 static double psat(double T)
@@ -269,8 +274,8 @@ int WeatherDataPoint::minute() const
 
 bool WeatherDataPoint::setMinute(int minute)
 {
-    if(0 > minute || 59 < minute)
-    {
+    if(0 > minute || 59 < minute) {
+        LOG(error) << "WeatherDataPoint: Minute value " << minute << " out of range.";
         return false;
     }
     m_minute = minute;
@@ -281,8 +286,8 @@ bool WeatherDataPoint::setMinute(std::string minute)
 {
     bool ok;
     int value = QString().fromStdString(minute).toInt(&ok);
-    if(0 > value || 59 < value || !ok)
-    {
+    if(0 > value || 59 < value || !ok) {
+        LOG(error) << "WeatherDataPoint: Minute value " << minute << " out of range.";
         return false;
     }
     m_minute = value;
