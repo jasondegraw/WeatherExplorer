@@ -123,6 +123,15 @@ bool WeatherDataModel::loadEpw(QString filename)
 void WeatherDataModel::clear()
 {
     beginResetModel();
+    m_city = std::string();
+    m_stateProvinceRegion = std::string();
+    m_country = std::string();
+    m_source = std::string();
+    m_WMO = std::string();
+    m_latitude = QString();
+    m_longitude = QString();
+    m_timeZone = QString();
+    m_elevation = QString();
     m_data.clear();
     endResetModel();
 }

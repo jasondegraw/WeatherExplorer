@@ -56,6 +56,7 @@ private:
     QAction *actionSave;
     QAction *actionExport;
     QAction *actionExit;
+    QAction *actionLocation;
     QAction *actionContents;
     QAction *actionAbout;
     QWidget *centralWidget;
