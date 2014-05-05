@@ -17,7 +17,7 @@ set(CMAKE_AUTOMOC ON)
 #endif(NOT CMAKE_PREFIX_PATH AND NOT Qt5Widgets_DIR)
 
 # Add a compiler flag
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-local-typedefs")
 
 # Find Boost
 find_package(Boost 1.55.0 COMPONENTS log thread system filesystem REQUIRED)

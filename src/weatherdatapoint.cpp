@@ -201,6 +201,7 @@ bool WeatherDataPoint::setMonth(int month)
 {
     if(1 > month || 12 < month)
     {
+        LOG(error) << "WeatherDataPoint: Month value " << month << " out of range.";
         return false;
     }
     m_month = month;
@@ -211,8 +212,12 @@ bool WeatherDataPoint::setMonth(std::string month)
 {
     bool ok;
     int value = QString().fromStdString(month).toInt(&ok);
-    if(1 > value || 12 < value || !ok)
+    if(!ok) {
+        LOG(error) << "WeatherDataPoint: Cannot convert month value '" << month << "' into an integer.";
+        return false;
+    } else if(1 > value || 12 < value || !ok)
     {
+        LOG(error) << "WeatherDataPoint: Month value " << month << " out of range.";
         return false;
     }
     m_month = value;
@@ -228,6 +233,7 @@ bool WeatherDataPoint::setDay(int day)
 {
     if(1 > day || 31 < day)
     {
+        LOG(error) << "WeatherDataPoint: Day value " << day << " out of range.";
         return false;
     }
     m_day = day;
@@ -238,8 +244,12 @@ bool WeatherDataPoint::setDay(std::string day)
 {
     bool ok;
     int value = QString().fromStdString(day).toInt(&ok);
-    if(1 > value || 31 < value || !ok)
+    if(!ok) {
+        LOG(error) << "WeatherDataPoint: Cannot convert day value '" << day << "' into an integer.";
+        return false;
+    } else if(1 > value || 31 < value || !ok)
     {
+        LOG(error) << "WeatherDataPoint: Day value " << day << " out of range.";
         return false;
     }
     m_day = value;
@@ -255,6 +265,7 @@ bool WeatherDataPoint::setHour(int hour)
 {
     if(1 > hour || 24 < hour)
     {
+        LOG(error) << "WeatherDataPoint: Minute value " << hour << " out of range.";
         return false;
     }
     m_hour = hour;
@@ -265,8 +276,12 @@ bool WeatherDataPoint::setHour(std::string hour)
 {
     bool ok;
     int value = QString().fromStdString(hour).toInt(&ok);
-    if(1 > value || 24 < value || !ok)
+    if(!ok) {
+        LOG(error) << "WeatherDataPoint: Cannot convert hour value '" << hour << "' into an integer.";
+        return false;
+    } else if(1 > value || 24 < value || !ok)
     {
+        LOG(error) << "WeatherDataPoint: Hour value " << hour << " out of range.";
         return false;
     }
     m_hour = value;
@@ -292,7 +307,10 @@ bool WeatherDataPoint::setMinute(std::string minute)
 {
     bool ok;
     int value = QString().fromStdString(minute).toInt(&ok);
-    if(0 > value || 59 < value || !ok) {
+    if(!ok) {
+        LOG(error) << "WeatherDataPoint: Cannot convert minute value '" << minute << "' into an integer.";
+        return false;
+    } else if(0 > value || 59 < value || !ok) {
         LOG(error) << "WeatherDataPoint: Minute value " << minute << " out of range.";
         return false;
     }

@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QVector>
 #include "weatherdatapoint.h"
+#include "weatherdataperiod.h"
 
 class WeatherDataModel : public QAbstractTableModel
 {
@@ -73,7 +74,10 @@ public:
 
 private:
     bool readLocation(QString line);
+    bool readDataPeriods(QString line);
 
+    int m_recordsPerHour;
+    QVector<WeatherDataPeriod> m_dataPeriods;
     std::string m_city;
     std::string m_stateProvinceRegion;
     std::string m_country;

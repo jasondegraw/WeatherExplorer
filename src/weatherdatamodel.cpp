@@ -77,7 +77,24 @@ bool WeatherDataModel::readLocation(QString line)
 
 bool WeatherDataModel::readDataPeriods(QString line)
 {
+    QStringList list = line.split(',');
+    if(list.size()-3 <= 0 || (list.size()-3) % 4 != 0) {
+        LOG(error) << "WeatherDataModel: Expected a multiple of 4 plus 3 entries, got " << list.size();
+        return false;
+    }
+    bool ok;
+    m_recordsPerHour = list[2].toInt(&ok);
+    if(!ok) {
+        LOG(error) << "WeatherDataModel: Cannot convert records per hour value '" << list[2].toStdString()
+                   << "' into an integer.";
+        return false;
+    } else if(1 > m_recordsPerHour)
+    {
+        LOG(error) << "WeatherDataModel: Records per hour value " << m_recordsPerHour << " out of range.";
+        return false;
+    }
 
+    return true;
 }
 
 bool WeatherDataModel::loadEpw(QString filename)
