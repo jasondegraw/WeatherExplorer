@@ -37,9 +37,15 @@ bool WeatherDataPoint::fromEpwString(std::string line)
     }
     // Use the appropriate setter on each field
     setYear(list[0].toStdString());
-    setMonth(list[1].toStdString());
-    setDay(list[2].toStdString());
-    setHour(list[3].toStdString());
+    if(!setMonth(list[1].toStdString())) {
+        return false;
+    }
+    if(!setDay(list[2].toStdString())) {
+        return false;
+    }
+    if(!setHour(list[3].toStdString())) {
+        return false;
+    }
     if(!setMinute(list[4].toStdString())) {
         return false;
     }

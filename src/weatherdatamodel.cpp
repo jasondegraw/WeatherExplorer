@@ -75,6 +75,11 @@ bool WeatherDataModel::readLocation(QString line)
     return true;
 }
 
+bool WeatherDataModel::readDataPeriods(QString line)
+{
+
+}
+
 bool WeatherDataModel::loadEpw(QString filename)
 {
     int lineNumber=0;
@@ -121,6 +126,7 @@ bool WeatherDataModel::loadEpw(QString filename)
         WeatherDataPoint point;
         if(!point.fromEpwString(line.toStdString())) {
             LOG(error) << "Failed to read input line " << lineNumber;
+            endResetModel();
             return false;
         }
         m_data << point;

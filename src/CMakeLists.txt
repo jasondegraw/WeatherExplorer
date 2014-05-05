@@ -38,6 +38,8 @@ set(SRCS main.cpp
          weatherdatamodel.cpp
          weatherdatapoint.h
          weatherdatapoint.cpp
+         weatherdataperiod.h
+         weatherdataperiod.cpp
          weatherexplorer.h
          weatherexplorer.cpp
          locationdialog.h
