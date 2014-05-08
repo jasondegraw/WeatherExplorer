@@ -140,13 +140,13 @@ bool WeatherDataModel::loadEpw(QString filename)
     m_data.clear();
     while(!line.isNull()){
         lineNumber++;
-        WeatherDataPoint point;
-        if(!point.fromEpwString(line.toStdString())) {
+        boost::optional<WeatherDataPoint> point = WeatherDataPoint::fromEpwString(line.toStdString());
+        if(!point) {
             LOG(error) << "Failed to read input line " << lineNumber;
             endResetModel();
             return false;
         }
-        m_data << point;
+        m_data << point.get();
         line = stream.readLine();
     }
     endResetModel();

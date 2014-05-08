@@ -55,8 +55,8 @@ public:
                      double daysSinceLastSnowfall,double albedo,double liquidPrecipitationDepth,
                      double liquidPrecipitationQuantity);
     // Conversion
-    bool fromEpwString(std::string line);
-    std::string toWthString();
+    static boost::optional<WeatherDataPoint> fromEpwString(std::string line);
+    boost::optional<std::string> toWthString();
     // One billion getters and setters
     int year() const;
     void setYear(int year);

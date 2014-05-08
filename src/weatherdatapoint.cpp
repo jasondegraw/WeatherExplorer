@@ -26,60 +26,65 @@ WeatherDataPoint::WeatherDataPoint()
 {
 }
 
-bool WeatherDataPoint::fromEpwString(std::string line)
+boost::optional<WeatherDataPoint> WeatherDataPoint::fromEpwString(std::string line)
 {
+    WeatherDataPoint point;
     QStringList list = QString().fromStdString(line).split(',');
     // Require 35 items in the list
-    if(list.size() != 35)
-    {
-        LOG(error) << "WeatherDataPoint Expected 35 fields, got " << list.size();
-        return false;
+    if(list.size() < 35) {
+        LOG(error) << "WeatherDataPoint: Expected 35 fields, got " << list.size();
+        return boost::optional<WeatherDataPoint>();
+    } else if(list.size() > 35) {
+        LOG(warning) << "WeatherDataPoint: Expected 35 fields, got " << list.size() <<", additional data ignored";
+        return boost::optional<WeatherDataPoint>();
     }
     // Use the appropriate setter on each field
-    setYear(list[0].toStdString());
-    if(!setMonth(list[1].toStdString())) {
-        return false;
+    if(!point.setYear(list[0].toStdString())) {
+        return boost::optional<WeatherDataPoint>();
     }
-    if(!setDay(list[2].toStdString())) {
-        return false;
+    if(!point.setMonth(list[1].toStdString())) {
+        return boost::optional<WeatherDataPoint>();
     }
-    if(!setHour(list[3].toStdString())) {
-        return false;
+    if(!point.setDay(list[2].toStdString())) {
+        return boost::optional<WeatherDataPoint>();
     }
-    if(!setMinute(list[4].toStdString())) {
-        return false;
+    if(!point.setHour(list[3].toStdString())) {
+        return boost::optional<WeatherDataPoint>();
     }
-    setDataSourceandUncertaintyFlags(list[5].toStdString());
-    setDryBulbTemperature(list[6].toStdString());
-    setDewPointTemperature(list[7].toStdString());
-    setRelativeHumidity(list[8].toStdString());
-    setAtmosphericStationPressure(list[9].toStdString());
-    setExtraterrestrialHorizontalRadiation(list[10].toStdString());
-    setExtraterrestrialDirectNormalRadiation(list[11].toStdString());
-    setHorizontalInfraredRadiationIntensity(list[12].toStdString());
-    setGlobalHorizontalRadiation(list[13].toStdString());
-    setDirectNormalRadiation(list[14].toStdString());
-    setDiffuseHorizontalRadiation(list[15].toStdString());
-    setGlobalHorizontalIlluminance(list[16].toStdString());
-    setDirectNormalIlluminance(list[17].toStdString());
-    setDiffuseHorizontalIlluminance(list[18].toStdString());
-    setZenithLuminance(list[19].toStdString());
-    setWindDirection(list[20].toStdString());
-    setWindSpeed(list[21].toStdString());
-    setTotalSkyCover(list[22].toStdString());
-    setOpaqueSkyCover(list[23].toStdString());
-    setVisibility(list[24].toStdString());
-    setCeilingHeight(list[25].toStdString());
-    setPresentWeatherObservation(list[26].toStdString());
-    setPresentWeatherCodes(list[27].toStdString());
-    setPrecipitableWater(list[28].toStdString());
-    setAerosolOpticalDepth(list[29].toStdString());
-    setSnowDepth(list[30].toStdString());
-    setDaysSinceLastSnowfall(list[31].toStdString());
-    setAlbedo(list[32].toStdString());
-    setLiquidPrecipitationDepth(list[33].toStdString());
-    setLiquidPrecipitationQuantity(list[34].toStdString());
-    return true;
+    if(!point.setMinute(list[4].toStdString())) {
+        return boost::optional<WeatherDataPoint>();
+    }
+    point.setDataSourceandUncertaintyFlags(list[5].toStdString());
+    point.setDryBulbTemperature(list[6].toStdString());
+    point.setDewPointTemperature(list[7].toStdString());
+    point.setRelativeHumidity(list[8].toStdString());
+    point.setAtmosphericStationPressure(list[9].toStdString());
+    point.setExtraterrestrialHorizontalRadiation(list[10].toStdString());
+    point.setExtraterrestrialDirectNormalRadiation(list[11].toStdString());
+    point.setHorizontalInfraredRadiationIntensity(list[12].toStdString());
+    point.setGlobalHorizontalRadiation(list[13].toStdString());
+    point.setDirectNormalRadiation(list[14].toStdString());
+    point.setDiffuseHorizontalRadiation(list[15].toStdString());
+    point.setGlobalHorizontalIlluminance(list[16].toStdString());
+    point.setDirectNormalIlluminance(list[17].toStdString());
+    point.setDiffuseHorizontalIlluminance(list[18].toStdString());
+    point.setZenithLuminance(list[19].toStdString());
+    point.setWindDirection(list[20].toStdString());
+    point.setWindSpeed(list[21].toStdString());
+    point.setTotalSkyCover(list[22].toStdString());
+    point.setOpaqueSkyCover(list[23].toStdString());
+    point.setVisibility(list[24].toStdString());
+    point.setCeilingHeight(list[25].toStdString());
+    point.setPresentWeatherObservation(list[26].toStdString());
+    point.setPresentWeatherCodes(list[27].toStdString());
+    point.setPrecipitableWater(list[28].toStdString());
+    point.setAerosolOpticalDepth(list[29].toStdString());
+    point.setSnowDepth(list[30].toStdString());
+    point.setDaysSinceLastSnowfall(list[31].toStdString());
+    point.setAlbedo(list[32].toStdString());
+    point.setLiquidPrecipitationDepth(list[33].toStdString());
+    point.setLiquidPrecipitationQuantity(list[34].toStdString());
+    return boost::optional<WeatherDataPoint>(point);
 }
 
 static double psat(double T)
@@ -111,7 +116,7 @@ static double psat(double T)
     return exp(rhs);
 }
 
-std::string WeatherDataPoint::toWthString()
+boost::optional<std::string> WeatherDataPoint::toWthString()
 {
     QStringList output;
     QString date = QString("%1/%2").arg(m_month).arg(m_day);
@@ -119,43 +124,41 @@ std::string WeatherDataPoint::toWthString()
     QString hms = QString().sprintf("%02d:%02d:00",m_hour,m_minute);
     output << hms;
     boost::optional<double> value = dryBulbTemperature();
-    if(!value)
-    {
-        ERROR(QString("Missing dry bulb temperature on %1 at %2").arg(date).arg(hms).toStdString());
+    if(!value) {
+        LOG(warning) << QString("Missing dry bulb temperature on %1 at %2").arg(date).arg(hms).toStdString();
+        return boost::optional<std::string>();
     }
     double drybulb = value.get()+273.15;
     output << QString("%1").arg(drybulb);
     value = atmosphericStationPressure();
-    if(!value)
-    {
-        ERROR(QString("Missing atmospheric station pressure on %1 at %2").arg(date).arg(hms).toStdString());
+    if(!value) {
+        LOG(warning) << QString("Missing atmospheric station pressure on %1 at %2").arg(date).arg(hms).toStdString();
+        return boost::optional<std::string>();
     }
     double p = value.get();
     output << m_atmosphericStationPressure;
-    if(!windSpeed())
-    {
-        ERROR(QString("Missing wind speed on %1 at %2").arg(date).arg(hms).toStdString());
+    if(!windSpeed()) {
+        LOG(warning) << QString("Missing wind speed on %1 at %2").arg(date).arg(hms).toStdString();
+        return boost::optional<std::string>();
     }
     output << m_windSpeed;
-    if(!windDirection())
-    {
-        ERROR(QString("Missing wind direction on %1 at %2").arg(date).arg(hms).toStdString());
+    if(!windDirection()) {
+        LOG(warning) << QString("Missing wind direction on %1 at %2").arg(date).arg(hms).toStdString();
+        return boost::optional<std::string>();
     }
     output << m_windDirection;
     double pw;
     value = relativeHumidity();
-    if(!value) // Don't have relative humidity - this has not been tested
-    {
+    if(!value) { // Don't have relative humidity - this has not been tested
         value = dewPointTemperature();
-        if(!value)
-        {
-            ERROR(QString("Cannot compute humidity ratio on %1 at %2").arg(date).arg(hms).toStdString());
+        if(!value) {
+            LOG(warning) << QString("Cannot compute humidity ratio on %1 at %2").arg(date).arg(hms).toStdString();
+            return boost::optional<std::string>();
         }
         double dewpoint = value.get()+273.15;
         pw = psat(dewpoint);
     }
-    else // Have relative humidity
-    {
+    else { // Have relative humidity
         double pws = psat(drybulb);
         pw = 0.01*value.get()*pws;
     }
@@ -167,7 +170,7 @@ std::string WeatherDataPoint::toWthString()
     output << "0";
     // Pass on snow and rain
     output << "0" << "0";
-    return output.join('\t').toStdString();
+    return boost::optional<std::string>(output.join('\t').toStdString());
 }
 
 int WeatherDataPoint::year() const
@@ -184,8 +187,7 @@ bool WeatherDataPoint::setYear(std::string year)
 {
     bool ok;
     int value = QString().fromStdString(year).toInt(&ok);
-    if(!ok)
-    {
+    if(!ok) {
         return false;
     }
     m_year = value;
