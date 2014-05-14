@@ -2,13 +2,14 @@
 #define WEATHERDATAPERIOD_H
 
 #include <QString>
+#include <QDate>
 
 class WeatherDataPeriod
 {
 public:
-    WeatherDataPeriod(int dayOfWeek=1, int startDay=1, int startMonth=1, int endDay=1, int endMonth=1);
-    void setName(QString name);
-    QString name() const;
+    WeatherDataPeriod(std::string name="", int dayOfWeek=1, int startMonth=1, int startDay=1, int endMonth=12, int endDay=31);
+    void setName(std::string name);
+    std::string name() const;
     bool setDayOfWeek(int dayOfWeek);
     bool setDayOfWeek(QString string);
     int dayOfWeek() const;
@@ -25,7 +26,7 @@ public:
     bool setEndMonth(QString string);
     int endMonth() const;
 private:
-    QString m_name;
+    std::string m_name;
     int m_dayOfWeek;
     int m_startDay;
     int m_startMonth;

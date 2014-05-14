@@ -20,6 +20,7 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QDate>
 
 #include "logging.h"
 
@@ -82,16 +83,56 @@ bool WeatherDataModel::readDataPeriods(QString line)
         LOG(error) << "WeatherDataModel: Expected a multiple of 4 plus 3 entries, got " << list.size();
         return false;
     }
+    if(list[0].toLower() != "data periods") {
+        LOG(error) << "WeatherDataModel: Unexpected section name '" << list[0].toStdString() <<"'";
+        return false;
+    }
     bool ok;
+    int nDataPeriods = list[1].toInt(&ok);
+    if((list.size()-3)/4 != nDataPeriods) {
+        LOG(error) << "WeatherDataModel: Expected data for " << nDataPeriods << " data periods, found data for "
+                   << (list.size()-3)/4;
+        return false;
+    }
     m_recordsPerHour = list[2].toInt(&ok);
     if(!ok) {
         LOG(error) << "WeatherDataModel: Cannot convert records per hour value '" << list[2].toStdString()
-                   << "' into an integer.";
+                   << "' into an integer";
         return false;
     } else if(1 > m_recordsPerHour)
     {
-        LOG(error) << "WeatherDataModel: Records per hour value " << m_recordsPerHour << " out of range.";
+        LOG(error) << "WeatherDataModel: Records per hour value " << m_recordsPerHour << " out of range";
         return false;
+    }
+    int i=2;
+    QString names[7] = {QString("sunday"), QString("monday"), QString("tuesday"), QString("wednesday"),
+                        QString("thursday"), QString("friday"), QString("saturday")};
+    for(int n=0;n<nDataPeriods;n++){
+        std::string name = list[++i].toStdString();
+        QString startDay = list[++i].toLower();
+        int intDay=0;
+        while(startDay != names[intDay]) {
+            intDay++;
+            if(intDay==7) {
+                LOG(error) << "WeatherDataModel: Invalid starting day '" << startDay.toStdString() << "'";
+                return false;
+            }
+        }
+        intDay++;
+        QString dateString = list[++i].simplified();
+        QDate startDate = QDate::fromString(dateString.replace(" ",""),"M/d");
+        if(!startDate.isValid()) {
+            LOG(error) << "WeatherDataModel: Invalid starting date string '" << list[i].toStdString() << "'";
+            return false;
+        }
+        dateString = list[++i].simplified();
+        QDate endDate = QDate::fromString(dateString.replace(" ",""),"M/d");
+        if(!endDate.isValid()) {
+            LOG(error) << "WeatherDataModel: Invalid ending date string '" << list[i].toStdString() << "'";
+            return false;
+        }
+        // If we got to this point, everything checks out
+        m_dataPeriods << WeatherDataPeriod(name,intDay,startDate.month(),startDate.day(),endDate.month(),endDate.day());
     }
 
     return true;
@@ -103,9 +144,10 @@ bool WeatherDataModel::loadEpw(QString filename)
     QFile fp(filename);
     if(!fp.open(QFile::ReadOnly))
     {
-        LOG(error) << "WeatherDataModel: Failed to open file '" << filename.toStdString() << "'.";
+        LOG(error) << "WeatherDataModel: Failed to open file '" << filename.toStdString() << "'";
         return false;
     }
+    LOG(info) << "WeatherDataModel: Opening file '" << filename.toStdString() << "'";
     QTextStream stream(&fp);
     QString line = stream.readLine();
     lineNumber++;
@@ -133,8 +175,20 @@ bool WeatherDataModel::loadEpw(QString filename)
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
     lineNumber++;
+    if(!readDataPeriods(line)) {
+        LOG(error) << "WeatherDataModel: Failed to read data periods";
+        return false;
+    }
+    LOG(info) << "Read " << m_dataPeriods.size() << " data period(s)";
+    for(int i=0;i<m_dataPeriods.size();i++) {
+        LOG(info) << "Period " << i+1 <<" : (" << m_dataPeriods[i].name() << ","
+                  << m_dataPeriods[i].dayOfWeek() << "," << m_dataPeriods[i].startMonth()
+                  << "/" <<  m_dataPeriods[i].startDay() << "," << m_dataPeriods[i].endMonth()
+                  << "/" <<  m_dataPeriods[i].endDay() << ")";
+    }
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
+
 
     beginResetModel();
     m_data.clear();

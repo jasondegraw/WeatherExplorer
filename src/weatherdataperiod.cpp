@@ -1,7 +1,8 @@
 #include "weatherdataperiod.h"
 
-WeatherDataPeriod::WeatherDataPeriod(int dayOfWeek, int startDay, int startMonth, int endDay, int endMonth)
+WeatherDataPeriod::WeatherDataPeriod(std::string name, int dayOfWeek, int startMonth, int startDay, int endMonth, int endDay)
 {
+    m_name = name;
     setDayOfWeek(dayOfWeek);
     setStartDay(startDay);
     setStartMonth(startMonth);
@@ -9,12 +10,12 @@ WeatherDataPeriod::WeatherDataPeriod(int dayOfWeek, int startDay, int startMonth
     setEndMonth(endMonth);
 }
 
-void WeatherDataPeriod::setName(QString name)
+void WeatherDataPeriod::setName(std::string name)
 {
     m_name=name;
 }
 
-QString WeatherDataPeriod::name() const
+std::string WeatherDataPeriod::name() const
 {
     return m_name;
 }
