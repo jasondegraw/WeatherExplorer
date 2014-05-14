@@ -22,6 +22,7 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 #include <QVector>
+#include <QProgressDialog>
 #include "weatherdatapoint.h"
 #include "weatherdataperiod.h"
 

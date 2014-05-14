@@ -26,7 +26,7 @@ WeatherDataPoint::WeatherDataPoint()
 {
 }
 
-boost::optional<WeatherDataPoint> WeatherDataPoint::fromEpwString(std::string line)
+boost::optional<WeatherDataPoint> WeatherDataPoint::fromEpwString(std::string line, bool readMinutes)
 {
     WeatherDataPoint point;
     QStringList list = QString().fromStdString(line).split(',');
@@ -51,8 +51,10 @@ boost::optional<WeatherDataPoint> WeatherDataPoint::fromEpwString(std::string li
     if(!point.setHour(list[3].toStdString())) {
         return boost::optional<WeatherDataPoint>();
     }
-    if(!point.setMinute(list[4].toStdString())) {
-        return boost::optional<WeatherDataPoint>();
+    if(readMinutes) {
+        if(!point.setMinute(list[4].toStdString())) {
+            return boost::optional<WeatherDataPoint>();
+        }
     }
     point.setDataSourceandUncertaintyFlags(list[5].toStdString());
     point.setDryBulbTemperature(list[6].toStdString());

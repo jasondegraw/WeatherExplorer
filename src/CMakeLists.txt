@@ -33,24 +33,28 @@ qt5_wrap_ui(UI_HEADERS locationdialog.ui loggingdialog.ui)
 # Generate rules for building source files from the resources
 qt5_add_resources(QRCS resources.qrc)
 
-set(SRCS main.cpp
-         weatherdatamodel.h
-         weatherdatamodel.cpp
+set(HDRS weatherdatamodel.h
          weatherdatapoint.h
-         weatherdatapoint.cpp
          weatherdataperiod.h
-         weatherdataperiod.cpp
          weatherexplorer.h
-         weatherexplorer.cpp
          locationdialog.h
-         locationdialog.cpp
          logging.h
+         loggingdialog.h)
+
+set(SRCS main.cpp
+         weatherdatamodel.cpp
+         weatherdatapoint.cpp
+         weatherdataperiod.cpp
+         weatherexplorer.cpp
+         locationdialog.cpp
          logging.cpp
-         loggingdialog.h
          loggingdialog.cpp)
 
 # Tell CMake to create the executable
-add_executable(WeatherExplorer ${SRCS} ${UI_HEADERS} ${QRCS})
+add_executable(WeatherExplorer ${SRCS} ${HDRS} ${UI_HEADERS} ${QRCS})
 
 # Add the Qt5 Widgets for linking
 target_link_libraries(WeatherExplorer Qt5::Widgets ${Boost_LIBRARIES})
+
+source_group(Headers FILES ${HDRS})
+source_group(Sources FILES ${SRCS})

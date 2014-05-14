@@ -146,6 +146,7 @@ bool WeatherDataModel::loadEpw(QString filename)
             endResetModel();
             return false;
         }
+        // Assume hourly data for now, leave the minutes as-is
         m_data << point.get();
         line = stream.readLine();
     }
