@@ -40,20 +40,19 @@ public:
                              AerosolOpticalDepth,SnowDepth,DaysSinceLastSnowfall,Albedo,
                              LiquidPrecipitationDepth,LiquidPrecipitationQuantity};
 
-    WeatherDataPoint();
-    WeatherDataPoint(int year,int month,int day,int hour,int minute,
-                     std::string dataSourceandUncertaintyFlags,double dryBulbTemperature,
-                     double dewPointTemperature,double relativeHumidity,double atmosphericStationPressure,
-                     double extraterrestrialHorizontalRadiation,double extraterrestrialDirectNormalRadiation,
-                     double horizontalInfraredRadiationIntensity,double globalHorizontalRadiation,
-                     double directNormalRadiation,double diffuseHorizontalRadiation,
-                     double globalHorizontalIlluminance,double directNormalIlluminance,
-                     double diffuseHorizontalIlluminance,double zenithLuminance,double windDirection,
-                     double windSpeed,int totalSkyCover,int opaqueSkyCover,double visibility,
-                     double ceilingHeight,int presentWeatherObservation,int presentWeatherCodes,
-                     double precipitableWater,double aerosolOpticalDepth,double snowDepth,
-                     double daysSinceLastSnowfall,double albedo,double liquidPrecipitationDepth,
-                     double liquidPrecipitationQuantity);
+    WeatherDataPoint(int year=1,int month=1,int day=1,int hour=0,int minute=0,
+                     std::string dataSourceandUncertaintyFlags="",double dryBulbTemperature=99.9,
+                     double dewPointTemperature=99.9, double relativeHumidity=999,double atmosphericStationPressure=999999,
+                     double extraterrestrialHorizontalRadiation=9999,double extraterrestrialDirectNormalRadiation=9999,
+                     double horizontalInfraredRadiationIntensity=9999,double globalHorizontalRadiation=9999,
+                     double directNormalRadiation=9999,double diffuseHorizontalRadiation=9999,
+                     double globalHorizontalIlluminance=999999,double directNormalIlluminance=999999,
+                     double diffuseHorizontalIlluminance=999999,double zenithLuminance=9999,double windDirection=999,
+                     double windSpeed=999,int totalSkyCover=99,int opaqueSkyCover=99,double visibility=9999,
+                     double ceilingHeight=99999,int presentWeatherObservation=0,int presentWeatherCodes=0,
+                     double precipitableWater=999,double aerosolOpticalDepth=.999,double snowDepth=999,
+                     double daysSinceLastSnowfall=99,double albedo=999,double liquidPrecipitationDepth=999,
+                     double liquidPrecipitationQuantity=99);
     // Conversion
     static boost::optional<WeatherDataPoint> fromEpwString(std::string line, bool readMinutes=false);
     boost::optional<std::string> toWthString();

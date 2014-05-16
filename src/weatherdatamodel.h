@@ -89,6 +89,8 @@ private:
     QString m_timeZone;
     QString m_elevation;
 
+    int m_minutesBetweenRecords;
+
     QStringList m_headers;
     QVector<WeatherDataPoint> m_data;
 };

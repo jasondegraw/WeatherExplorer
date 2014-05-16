@@ -99,11 +99,16 @@ bool WeatherDataModel::readDataPeriods(QString line)
         LOG(error) << "WeatherDataModel: Cannot convert records per hour value '" << list[2].toStdString()
                    << "' into an integer";
         return false;
-    } else if(1 > m_recordsPerHour)
+    } else if(1 > m_recordsPerHour || 60 < m_recordsPerHour)
     {
         LOG(error) << "WeatherDataModel: Records per hour value " << m_recordsPerHour << " out of range";
         return false;
     }
+    if(60 % m_recordsPerHour != 0) {
+        LOG(error) << "WeatherDataModel: " << m_recordsPerHour << " records per hour does not evenly divide an hour";
+        return false;
+    }
+    m_minutesBetweenRecords = 60/m_recordsPerHour;
     int i=2;
     QString names[7] = {QString("sunday"), QString("monday"), QString("tuesday"), QString("wednesday"),
                         QString("thursday"), QString("friday"), QString("saturday")};
@@ -140,6 +145,8 @@ bool WeatherDataModel::readDataPeriods(QString line)
 
 bool WeatherDataModel::loadEpw(QString filename)
 {
+    int allowedRecordsPerHour[] = {1,2,3,4,5,6,10,12,15,20,30,60};
+    int minutesBetweenRecords = 60;
     int lineNumber=0;
     QFile fp(filename);
     if(!fp.open(QFile::ReadOnly))
@@ -189,9 +196,9 @@ bool WeatherDataModel::loadEpw(QString filename)
     //std::cout << line.toStdString() << std::endl;
     line = stream.readLine();
 
-
     beginResetModel();
     m_data.clear();
+    int currentMinute = 0;
     while(!line.isNull()){
         lineNumber++;
         boost::optional<WeatherDataPoint> point = WeatherDataPoint::fromEpwString(line.toStdString());
@@ -200,7 +207,13 @@ bool WeatherDataModel::loadEpw(QString filename)
             endResetModel();
             return false;
         }
-        // Assume hourly data for now, leave the minutes as-is
+        if(m_recordsPerHour > 1) {
+            point->setMinute(currentMinute);
+            currentMinute += m_minutesBetweenRecords;
+            if(currentMinute == 60) {
+                currentMinute = 0;
+            }
+        }
         m_data << point.get();
         line = stream.readLine();
     }

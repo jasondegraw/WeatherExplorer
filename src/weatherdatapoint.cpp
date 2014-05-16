@@ -22,8 +22,59 @@
 
 #include "logging.h"
 
-WeatherDataPoint::WeatherDataPoint()
+WeatherDataPoint::WeatherDataPoint(int year,int month,int day,int hour,int minute,
+                                   std::string dataSourceandUncertaintyFlags,double dryBulbTemperature,
+                                   double dewPointTemperature,double relativeHumidity,
+                                   double atmosphericStationPressure,
+                                   double extraterrestrialHorizontalRadiation,
+                                   double extraterrestrialDirectNormalRadiation,
+                                   double horizontalInfraredRadiationIntensity,
+                                   double globalHorizontalRadiation,double directNormalRadiation,
+                                   double diffuseHorizontalRadiation,double globalHorizontalIlluminance,
+                                   double directNormalIlluminance,double diffuseHorizontalIlluminance,
+                                   double zenithLuminance,double windDirection,double windSpeed,
+                                   int totalSkyCover,int opaqueSkyCover,double visibility,
+                                   double ceilingHeight,int presentWeatherObservation,
+                                   int presentWeatherCodes,double precipitableWater,
+                                   double aerosolOpticalDepth,double snowDepth,double daysSinceLastSnowfall,
+                                   double albedo,double liquidPrecipitationDepth,
+                                   double liquidPrecipitationQuantity)
 {
+    setYear(year);
+    setMonth(month);
+    setDay(day);
+    setHour(hour);
+    setMinute(minute);
+    setDataSourceandUncertaintyFlags(dataSourceandUncertaintyFlags);
+    setDryBulbTemperature(dryBulbTemperature);
+    setDewPointTemperature(dewPointTemperature);
+    setRelativeHumidity(relativeHumidity);
+    setAtmosphericStationPressure(atmosphericStationPressure);
+    setExtraterrestrialHorizontalRadiation(extraterrestrialHorizontalRadiation);
+    setExtraterrestrialDirectNormalRadiation(extraterrestrialDirectNormalRadiation);
+    setHorizontalInfraredRadiationIntensity(horizontalInfraredRadiationIntensity);
+    setGlobalHorizontalRadiation(globalHorizontalRadiation);
+    setDirectNormalRadiation(directNormalRadiation);
+    setDiffuseHorizontalRadiation(diffuseHorizontalRadiation);
+    setGlobalHorizontalIlluminance(globalHorizontalIlluminance);
+    setDirectNormalIlluminance(directNormalIlluminance);
+    setDiffuseHorizontalIlluminance(diffuseHorizontalIlluminance);
+    setZenithLuminance(zenithLuminance);
+    setWindDirection(windDirection);
+    setWindSpeed(windSpeed);
+    setTotalSkyCover(totalSkyCover);
+    setOpaqueSkyCover(opaqueSkyCover);
+    setVisibility(visibility);
+    setCeilingHeight(ceilingHeight);
+    setPresentWeatherObservation(presentWeatherObservation);
+    setPresentWeatherCodes(presentWeatherCodes);
+    setPrecipitableWater(precipitableWater);
+    setAerosolOpticalDepth(aerosolOpticalDepth);
+    setSnowDepth(snowDepth);
+    setDaysSinceLastSnowfall(daysSinceLastSnowfall);
+    setAlbedo(albedo);
+    setLiquidPrecipitationDepth(liquidPrecipitationDepth);
+    setLiquidPrecipitationQuantity(liquidPrecipitationQuantity);
 }
 
 boost::optional<WeatherDataPoint> WeatherDataPoint::fromEpwString(std::string line, bool readMinutes)
