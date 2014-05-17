@@ -1,5 +1,6 @@
 /**********************************************************************
  *  Copyright (c) 2013, The Pennsylvania State University.
+ *  Copyright (c) 2014, Jason W. DeGraw.
  *  All rights reserved.
  *
  *  This library is free software; you can redistribute it and/or
