@@ -50,12 +50,14 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionExport_triggered();
+    void on_actionImport_triggered();
     void on_actionShowLog_triggered();
 
 private:
     QAction *actionNew;
     QAction *actionOpen;
     QAction *actionSave;
+    QAction *actionImport;
     QAction *actionExport;
     QAction *actionExit;
     QAction *actionLocation;

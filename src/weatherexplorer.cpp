@@ -61,6 +61,11 @@ void WeatherExploder::setupUi()
     QIcon icon2;
     icon2.addFile(QStringLiteral(":/images/save.png"), QSize(), QIcon::Normal, QIcon::Off);
     actionSave->setIcon(icon2);
+    actionImport = new QAction(this);
+    actionImport->setObjectName(QStringLiteral("actionImport"));
+    //QIcon icon3;
+    //icon3.addFile(QStringLiteral(":/images/export.png"), QSize(), QIcon::Normal, QIcon::Off);
+    //actionExport->setIcon(icon3);
     actionExport = new QAction(this);
     actionExport->setObjectName(QStringLiteral("actionExport"));
     QIcon icon3;
@@ -113,6 +118,7 @@ void WeatherExploder::setupUi()
     menuFile->addAction(actionOpen);
     menuFile->addAction(actionSave);
     menuFile->addAction(actionExport);
+    menuFile->addAction(actionImport);
     menuFile->addAction(actionExit);
     menuWindow->addAction(actionShowLog);
     menuHelp->addAction(actionContents);
@@ -138,6 +144,7 @@ void WeatherExploder::retranslateUi()
     actionOpen->setShortcut(QApplication::translate("WeatherExploder", "Ctrl+O", 0));
     actionSave->setText(QApplication::translate("WeatherExploder", "&Save", 0));
     actionSave->setShortcut(QApplication::translate("WeatherExploder", "Ctrl+S", 0));
+    actionImport->setText(QApplication::translate("WeatherExploder", "Import...", 0));
     actionExport->setText(QApplication::translate("WeatherExploder", "Export...", 0));
     actionExit->setText(QApplication::translate("WeatherExploder", "E&xit", 0));
     actionExit->setShortcut(QApplication::translate("WeatherExploder", "Ctrl+Q", 0));
@@ -191,8 +198,16 @@ void WeatherExploder::on_actionSave_triggered()
     {
 
     }*/
-    LOG(info) << "Well, I hope this works";
-    LOG(info) << "Hello?";
+    //LOG(info) << "Well, I hope this works";
+    //LOG(info) << "Hello?";
+}
+
+
+void WeatherExploder::on_actionImport_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
+                                                    "", tr("ASHRAE IWEC (*.iwc);;CONTAM WTH (*.wth);;Radiance WEA (*.wea)"));
+    std::cout << fileName.toStdString() << std::endl;
 }
 
 void WeatherExploder::on_actionExport_triggered()
