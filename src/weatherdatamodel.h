@@ -32,8 +32,10 @@ public:
     WeatherDataModel();
     bool loadEpw(QString filename);
     bool writeEpw(QString filename);
-    bool writeWth(QString filename);
+    bool writeWth(QString filename, int dataPeriodIndex=0);
+    bool loadWth(QString filename);
     bool writeWea(QString filename);
+    bool loadIwc(QString filename);
     void clear();
 
     std::string city() const;
