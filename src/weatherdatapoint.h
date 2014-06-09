@@ -122,11 +122,11 @@ public:
     boost::optional<double> windSpeed() const;
     bool setWindSpeed(double windSpeed);
     bool setWindSpeed(std::string windSpeed);
-    int totalSkyCover() const;
-    bool setTotalSkyCover(int totalSkyCover);
+    boost::optional<double> totalSkyCover() const;
+    bool setTotalSkyCover(double totalSkyCover);
     bool setTotalSkyCover(std::string totalSkyCover);
-    int opaqueSkyCover() const;
-    bool setOpaqueSkyCover(int opaqueSkyCover);
+    boost::optional<double> opaqueSkyCover() const;
+    bool setOpaqueSkyCover(double opaqueSkyCover);
     bool setOpaqueSkyCover(std::string opaqueSkyCover);
     boost::optional<double> visibility() const;
     void setVisibility(double visibility);
@@ -187,8 +187,8 @@ private:
     QString m_zenithLuminance;
     QString m_windDirection;
     QString m_windSpeed;
-    int m_totalSkyCover;
-    int m_opaqueSkyCover;
+    QString m_totalSkyCover;
+    QString m_opaqueSkyCover;
     QString m_visibility;
     QString m_ceilingHeight;
     int m_presentWeatherObservation;

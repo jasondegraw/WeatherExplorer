@@ -928,19 +928,24 @@ bool WeatherDataPoint::setWindSpeed(std::string windSpeed)
     return true;
 }
 
-int WeatherDataPoint::totalSkyCover() const
+boost::optional<double> WeatherDataPoint::totalSkyCover() const
 {
-    return m_totalSkyCover;
+  double value = m_totalSkyCover.toDouble();
+  if(value == 99)
+  {
+      return boost::optional<double>();
+  }
+  return boost::optional<double>(value);
 }
 
-bool WeatherDataPoint::setTotalSkyCover(int totalSkyCover)
+bool WeatherDataPoint::setTotalSkyCover(double totalSkyCover)
 {
     if(0 > totalSkyCover || 10 < totalSkyCover)
     {
-        m_totalSkyCover = 99;
+        m_totalSkyCover = "99";
         return false;
     }
-    m_totalSkyCover = totalSkyCover;
+    m_totalSkyCover = QString("%1").arg(totalSkyCover);
     return true;
 }
 
@@ -957,16 +962,21 @@ bool WeatherDataPoint::setTotalSkyCover(std::string totalSkyCover)
     return true;
 }
 
-int WeatherDataPoint::opaqueSkyCover() const
+boost::optional<double> WeatherDataPoint::opaqueSkyCover() const
 {
-    return m_opaqueSkyCover;
+  double value = m_opaqueSkyCover.toDouble();
+  if(value == 99)
+  {
+      return boost::optional<double>();
+  }
+  return boost::optional<double>(value);
 }
 
-bool WeatherDataPoint::setOpaqueSkyCover(int opaqueSkyCover)
+bool WeatherDataPoint::setOpaqueSkyCover(double opaqueSkyCover)
 {
     if(0 > opaqueSkyCover || 10 < opaqueSkyCover)
     {
-        m_opaqueSkyCover = 99;
+        m_opaqueSkyCover = "99";
         return false;
     }
     m_opaqueSkyCover = opaqueSkyCover;

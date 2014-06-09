@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(WeatherExplorer)
 
+
+
 add_subdirectory(src)
 
 # Find includes in the build directories
