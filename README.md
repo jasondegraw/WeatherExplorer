@@ -14,9 +14,8 @@ not available.
 
 ## Building the Program
 
-At present, build files are  provided for Qt Creator and 
-CMake. The Creator file will go away soon. Otherwise, you'll
-need:
+The program used to be built with Qt Creator's ".pro" files, but now
+is built with CMake. In addition to CMake, you will need:
 
 * Qt - I build with Qt5, but it might still work with 4.
 
