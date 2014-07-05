@@ -45,7 +45,7 @@ set(SRCS main.cpp
 add_executable(WeatherExplorer ${SRCS} ${HDRS} ${UI_HEADERS} ${QRCS})
 
 # Add the Qt5 Widgets for linking
-target_link_libraries(WeatherExplorer Qt5::Widgets ${Boost_LIBRARIES})
+target_link_libraries(WeatherExplorer Qt5::Widgets ${Boost_LIBRARIES} qdecnumber)
 
 source_group(Headers FILES ${HDRS})
 source_group(Sources FILES ${SRCS})

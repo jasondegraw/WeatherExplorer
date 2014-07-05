@@ -23,6 +23,7 @@
 #include <string>
 
 #include <boost/optional.hpp>
+#include "../qdecnumber/qdecnumber.h"
 
 #include <iostream>
 #define ERROR(a) std::cout<<a<<std::endl;exit(EXIT_FAILURE)
@@ -171,35 +172,35 @@ private:
     int m_hour;
     int m_minute;
     std::string m_dataSourceandUncertaintyFlags;
-    QString m_dryBulbTemperature;
-    QString m_dewPointTemperature;
-    QString m_relativeHumidity;
-    QString m_atmosphericStationPressure;
-    QString m_extraterrestrialHorizontalRadiation;
-    QString m_extraterrestrialDirectNormalRadiation;
-    QString m_horizontalInfraredRadiationIntensity;
-    QString m_globalHorizontalRadiation;
-    QString m_directNormalRadiation;
-    QString m_diffuseHorizontalRadiation;
-    QString m_globalHorizontalIlluminance;
-    QString m_directNormalIlluminance;
-    QString m_diffuseHorizontalIlluminance;
-    QString m_zenithLuminance;
-    QString m_windDirection;
-    QString m_windSpeed;
-    QString m_totalSkyCover;
-    QString m_opaqueSkyCover;
-    QString m_visibility;
-    QString m_ceilingHeight;
+    QDecNumber m_dryBulbTemperature;
+    QDecNumber m_dewPointTemperature;
+    QDecNumber m_relativeHumidity;
+    QDecNumber m_atmosphericStationPressure;
+    QDecNumber m_extraterrestrialHorizontalRadiation;
+    QDecNumber m_extraterrestrialDirectNormalRadiation;
+    QDecNumber m_horizontalInfraredRadiationIntensity;
+    QDecNumber m_globalHorizontalRadiation;
+    QDecNumber m_directNormalRadiation;
+    QDecNumber m_diffuseHorizontalRadiation;
+    QDecNumber m_globalHorizontalIlluminance;
+    QDecNumber m_directNormalIlluminance;
+    QDecNumber m_diffuseHorizontalIlluminance;
+    QDecNumber m_zenithLuminance;
+    QDecNumber m_windDirection;
+    QDecNumber m_windSpeed;
+    QDecNumber m_totalSkyCover;
+    QDecNumber m_opaqueSkyCover;
+    QDecNumber m_visibility;
+    QDecNumber m_ceilingHeight;
     int m_presentWeatherObservation;
     int m_presentWeatherCodes;
-    QString m_precipitableWater;
-    QString m_aerosolOpticalDepth;
-    QString m_snowDepth;
-    QString m_daysSinceLastSnowfall;
-    QString m_albedo;
-    QString m_liquidPrecipitationDepth;
-    QString m_liquidPrecipitationQuantity;
+    QDecNumber m_precipitableWater;
+    QDecNumber m_aerosolOpticalDepth;
+    QDecNumber m_snowDepth;
+    QDecNumber m_daysSinceLastSnowfall;
+    QDecNumber m_albedo;
+    QDecNumber m_liquidPrecipitationDepth;
+    QDecNumber m_liquidPrecipitationQuantity;
 };
 
 #endif // WEATHERDATAPOINT_H

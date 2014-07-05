@@ -85,7 +85,7 @@ boost::optional<WeatherDataPoint> WeatherDataPoint::fromEpwString(std::string li
     // Require 35 items in the list
     if(list.size() < 35) {
         LOG(error) << "WeatherDataPoint: Expected 35 fields, got " << list.size();
-        return boost::optional<WeatherDataPoint>();
+        return boost::none;
     } else if(list.size() > 35) {
         LOG(warning) << "WeatherDataPoint: Expected 35 fields, got " << list.size() <<", additional data ignored";
         return boost::optional<WeatherDataPoint>();
@@ -190,17 +190,17 @@ boost::optional<std::string> WeatherDataPoint::toWthString()
         return boost::optional<std::string>();
     }
     double p = value.get();
-    output << m_atmosphericStationPressure;
+    output << m_atmosphericStationPressure.toString();
     if(!windSpeed()) {
         LOG(warning) << QString("Missing wind speed on %1 at %2").arg(date).arg(hms).toStdString();
         return boost::optional<std::string>();
     }
-    output << m_windSpeed;
+    output << m_windSpeed.toString();
     if(!windDirection()) {
         LOG(warning) << QString("Missing wind direction on %1 at %2").arg(date).arg(hms).toStdString();
         return boost::optional<std::string>();
     }
-    output << m_windDirection;
+    output << m_windDirection.toString();
     double pw;
     value = relativeHumidity();
     if(!value) { // Don't have relative humidity - this has not been tested
