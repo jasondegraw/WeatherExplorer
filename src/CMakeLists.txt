@@ -16,8 +16,7 @@ find_package(Boost 1.55.0 COMPONENTS log thread system filesystem REQUIRED)
 
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
-# Find the QtWidgets library
-find_package(Qt5Widgets REQUIRED)
+
 
 # Generate code from ui files
 qt5_wrap_ui(UI_HEADERS locationdialog.ui loggingdialog.ui)
