@@ -162,10 +162,11 @@ public:
     void setLiquidPrecipitationQuantity(double liquidPrecipitationQuantity);
     bool setLiquidPrecipitationQuantity(std::string liquidPrecipitationQuantity);
 
-    std::string fieldUnits(WeatherDataFieldId id);
-    boost::optional<std::string> toString(WeatherDataFieldId id);
-    boost::optional<double> toDouble(WeatherDataFieldId id);
-    boost::optional<int> toInt(WeatherDataFieldId id);
+    std::string getUnits(WeatherDataFieldId id);
+    // Need to think about the string getter more
+    //boost::optional<std::string> getString(WeatherDataFieldId id);
+    boost::optional<double> getDouble(WeatherDataFieldId id);
+    boost::optional<int> getInt(WeatherDataFieldId id);
 
 private:
     int m_year;

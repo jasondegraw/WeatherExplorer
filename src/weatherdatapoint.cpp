@@ -1215,7 +1215,7 @@ bool WeatherDataPoint::setLiquidPrecipitationQuantity(std::string liquidPrecipit
   return true;
 }
 
-std::string WeatherDataPoint::fieldUnits(WeatherDataFieldId id)
+std::string WeatherDataPoint::getUnits(WeatherDataFieldId id)
 {
   std::string string;
   switch(id) {
@@ -1312,7 +1312,7 @@ std::string WeatherDataPoint::fieldUnits(WeatherDataFieldId id)
   return string;
 }
 
-boost::optional<double> WeatherDataPoint::toDouble(WeatherDataFieldId id)
+boost::optional<double> WeatherDataPoint::getDouble(WeatherDataFieldId id)
 {
   boost::optional<double> value;
   switch(id) {
@@ -1409,7 +1409,7 @@ boost::optional<double> WeatherDataPoint::toDouble(WeatherDataFieldId id)
   return value;
 }
 
-boost::optional<int> WeatherDataPoint::toInt(WeatherDataFieldId id)
+boost::optional<int> WeatherDataPoint::getInt(WeatherDataFieldId id)
 {
   int value;
   switch(id) {
