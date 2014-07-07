@@ -26,7 +26,6 @@
 #include "../qdecnumber/qdecnumber.h"
 
 #include <iostream>
-#define ERROR(a) std::cout<<a<<std::endl;exit(EXIT_FAILURE)
 
 class WeatherDataPoint
 {
@@ -164,6 +163,9 @@ public:
     bool setLiquidPrecipitationQuantity(std::string liquidPrecipitationQuantity);
 
     std::string fieldUnits(WeatherDataFieldId id);
+    boost::optional<std::string> toString(WeatherDataFieldId id);
+    boost::optional<double> toDouble(WeatherDataFieldId id);
+    boost::optional<int> toInt(WeatherDataFieldId id);
 
 private:
     int m_year;
